@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Task" ADD COLUMN     "progress" DOUBLE PRECISION NOT NULL DEFAULT 0;

@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String          @id @default(cuid())
+  name           String
+  role           UserRole
+  email          String          @unique
+  password       String
+  tasks          Task[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  submittedWorks SubmittedWork[]
+}
+
+enum UserRole {
+  MANAGER
+  ADMIN
+  EMPLOYEE
+}
+
+model Task {
+  id             String          @id @default(cuid())
+  title          String
+  description    String
+  assignedBy     String
+  userId         String
+  assignedTo     User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  startDate      String
+  endDate        String
+  priority       TaskPriority
+  price          Float
+  currency       Currency
+  attachments    Json[]          @default([])
+  status         TaskStatus
+  archived       Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  submitted      Boolean         @default(false)
+  submittedAt    DateTime?
+  archivedBy     String?
+  archivedDate   DateTime?
+  progress       Float           @default(0)
+  reassignReason String?
+  comment        String?
+  submittedWorks SubmittedWork[]
+}
+
+model SubmittedWork {
+  id             String       @id @default(cuid())
+  title          String
+  description    String
+  fromEmployee   String
+  assignedBy     String
+  userId         String
+  toEmployee     User         @relation(fields: [userId], references: [id])
+  startDate      String
+  endDate        String
+  priority       TaskPriority
+  price          Float
+  currency       Currency
+  attachments    Json[]       @default([])
+  status         TaskStatus
+  archived       Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  submitted      Boolean      @default(false)
+  submittedAt    DateTime?
+  archivedBy     String?
+  archivedDate   DateTime?
+  progress       Float        @default(0)
+  reassignReason String?
+  comment        String?
+  task           Task         @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  taskId         String
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Currency {
+  USD
+  EUR
+  EGP
+  AED
+  SAR
+  GBP
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  UNDER_REVIEW
+}
