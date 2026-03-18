@@ -1,6 +1,7 @@
 import { getCurrencySymbol } from "./currency";
+import { Currency } from "./types";
 
-export function formatPriceWithCurrency(price: number, currency: string) {
+export function formatPriceWithCurrency(price: number, currency: Currency) {
   if (!price) return "Not set";
   const symbol = getCurrencySymbol(currency);
   return `${symbol}${price.toFixed(2)}`;

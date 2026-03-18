@@ -1,4 +1,6 @@
-export function getCurrencySymbol(currencyCode: string) {
+import { Currency } from "./types";
+
+export function getCurrencySymbol(currencyCode: Currency) {
   const symbols = {
     USD: "$",
     EUR: "€",
